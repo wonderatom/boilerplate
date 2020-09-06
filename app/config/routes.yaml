@@ -1,0 +1,3 @@
+api.hangar.airplanes:
+  path: /api/v1/hangars/{name}/airplanes
+  controller: App\Controller\V1\HangarController::airplanes

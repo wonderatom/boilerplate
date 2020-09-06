@@ -1,0 +1,33 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Model\Hangar" table="hangars">
+        <unique-constraints>
+            <unique-constraint columns="name" name="name_idx" />
+        </unique-constraints>
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="name" column="name" type="string" length="50" unique="true" />
+
+        <many-to-many field="airplanes" target-entity="App\Model\Airplane">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+            <join-table name="hangars_airplanes">
+                <join-columns>
+                    <join-column name="hangar_id" referenced-column-name="id" nullable="false" />
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="airplane_id" referenced-column-name="id" nullable="false" unique="true"/>
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+
+    </entity>
+
+</doctrine-mapping>
