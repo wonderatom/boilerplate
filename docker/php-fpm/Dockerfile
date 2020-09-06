@@ -1,13 +1,12 @@
 FROM php:7.4-fpm-alpine
 
-RUN apk --update --no-cache add git
-RUN docker-php-ext-install pdo_mysql
+RUN apk add --no-cache git icu-dev libzip-dev postgresql-dev
 
+RUN docker-php-ext-install zip pdo pdo_pgsql
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/app
 
 CMD composer install
-CMD wait-for-it database:3306 -- bin/console doctrine:migrations:migrate
 CMD php-fpm
 
 EXPOSE 9000
