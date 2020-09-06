@@ -2,7 +2,6 @@
 
 namespace App\Domain\Collection;
 
-
 use App\Domain\Contract\ConditionInterface;
 
 class ConditionCollection
