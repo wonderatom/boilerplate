@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  postgres:
+    image: "postgres"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - 5433:5433
+    volumes:
+      - application-db-data:/var/lib/postgresql/data/
+    networks: [boilerplate]
+
+  application:
+    build:
+      context: ./php-fpm
+    depends_on:
+      - postgres
+    env_file:
+      - ./../.env
+    volumes:
+      - ../app:/var/www/app
+    networks: [boilerplate]
+
+  nginx:
+    image: nginx:stable
+    ports:
+      - "8080:80"
+    links:
+      - application
+    depends_on:
+      - application
+    volumes:
+      - ../app:/var/www/app
+      - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+    networks: [boilerplate]
+
+networks:
+  boilerplate:
+    driver: bridge
+
+volumes:
+  application-db-data:
